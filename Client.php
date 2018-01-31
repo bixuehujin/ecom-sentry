@@ -4,11 +4,6 @@ namespace ecom\sentry;
 
 use Yii;
 
-/**
- * Client class file.
- * @Author haoliang
- * @Date 31.01.2018 16:07
- */
 class Client extends \Raven_Client
 {
 

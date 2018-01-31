@@ -19,5 +19,8 @@
         "psr-4": {
             "ecom\\sentry\\": ""
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5"
     }
 }
