@@ -94,15 +94,14 @@ class Sentry extends Component
         return $this->_loggedEventIds;
     }
 
-    /** @var \Raven_Client */
+    /** @var \ecom\sentry\Client */
     private $_client;
 
-    /**
-     * Initializes the error handler.
-     */
-    public function init()
+    public function __construct(Client $clientProto, $config = [])
     {
-        $this->_client = $this->createClient();
+        parent::__construct($config);
+
+        $this->_client = $this->createClient(get_class($clientProto));
     }
 
     /**
@@ -113,7 +112,7 @@ class Sentry extends Component
      *   extra: (array) additional metadata to store with the event
      * @param string $logger name of the logger.
      * @param mixed $context exception context.
-     * @return string event id (or null if not captured).
+     * @return string|null event id (or null if not captured).
      * @throws Exception if logging the exception fails.
      */
     public function captureException($exception, $options = [], $logger = '', $context = null)
@@ -148,7 +147,7 @@ class Sentry extends Component
      *   extra: (array) additional metadata to store with the event
      * @param bool $stack whether to send the stack trace.
      * @param mixed $context message context.
-     * @return string event id (or null if not captured).
+     * @return string|null event id (or null if not captured).
      * @throws Exception if logging the message fails.
      */
     public function captureMessage($message, $params = [], $options = [], $stack = false, $context = null)
@@ -185,7 +184,7 @@ class Sentry extends Component
      * @param string $query query to log.
      * @param integer $level log level.
      * @param string $engine name of the sql driver.
-     * @return string event id (or null if not captured).
+     * @return string|null event id (or null if not captured).
      * @throws Exception if logging the query fails.
      */
     public function captureQuery($query, $level = Logger::LEVEL_INFO, $engine = '')
@@ -244,10 +243,10 @@ class Sentry extends Component
 
     /**
      * Creates a Raven client
-     * @return Raven_Client client instance.
+     * @return \ecom\sentry\Client client instance.
      * @throws Exception if the client could not be created.
      */
-    protected function createClient()
+    protected function createClient($clientClass)
     {
         $options = ArrayHelper::merge(
             [
@@ -262,7 +261,7 @@ class Sentry extends Component
 
         try {
             $this->checkTags($options['tags']);
-            return new \Raven_Client($this->dns, $options);
+            return new $clientClass($this->dns, $options);
         } catch (\Exception $e) {
             if (YII_DEBUG) {
                 throw new Exception('SentryClient failed to create client: ' . $e->getMessage(), (int)$e->getCode());

@@ -11,13 +11,16 @@
             "homepage": "http://www.cniska.net/"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
-        "raven/raven": "0.10.*"
+        "sentry/sentry": "~1.8.2",
+        "yiisoft/yii2": "~2.0.0"
     },
     "autoload": {
         "psr-4": {
             "ecom\\sentry\\": ""
         }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5"
     }
 }
